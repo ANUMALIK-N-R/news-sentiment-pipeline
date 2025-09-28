@@ -50,12 +50,11 @@ services:
         value: kafka:9092
 
   # Dashboard: The public-facing web service
-  - type: web
+    - type: web
     name: dashboard
     dockerfilePath: ./Dockerfile
     startCommand: streamlit run dashboard.py --server.port=8080 --server.address=0.0.0.0
-    healthCheck:
-      path: /healthz
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
+
