@@ -2,10 +2,9 @@ services:
   # Zookeeper: A private service for Kafka to use
   - type: pserv
     name: zookeeper
-    image:
-      url: confluentinc/cp-zookeeper:7.5.0
+    dockerfilePath: ./Dockerfile.zookeeper # CHANGED FROM image:
     envVars:
-      - key: ZOOKEEPER_CLIENT_PORT
+      - key: ZOOKeeper_CLIENT_PORT
         value: 2181
       - key: ZOOKEEPER_TICK_TIME
         value: 2000
@@ -13,17 +12,15 @@ services:
   # Kafka: A private service for messaging
   - type: pserv
     name: kafka
-    image:
-      url: confluentinc/cp-kafka:7.5.0
+    dockerfilePath: ./Dockerfile.kafka # CHANGED FROM image:
     envVars:
       - key: KAFKA_BROKER_ID
         value: 1
       - key: KAFKA_ZOOKEEPER_CONNECT
-        value: zookeeper:2181 # Connects to the Zookeeper service above
+        value: zookeeper:2181
       - key: KAFKA_LISTENERS
         value: PLAINTEXT://0.0.0.0:9092
       - key: KAFKA_ADVERTISED_LISTENERS
-        # Uses Render's internal network to advertise its address
         value: PLAINTEXT_INTERNAL://kafka:9092
       - key: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
         value: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
