@@ -1,0 +1,6 @@
+pyspark
+kafka-python
+requests
+nltk
+streamlit
+altair

@@ -1,0 +1,27 @@
+[
+    {
+        "title": "Tech stocks rally as market optimism grows",
+        "sentiment": "Positive",
+        "label": 2.0
+    },
+    {
+        "title": "Economic slowdown sparks fear among investors",
+        "sentiment": "Negative",
+        "label": 0.0
+    },
+    {
+        "title": "AI startups attract record funding in 2023",
+        "sentiment": "Positive",
+        "label": 2.0
+    },
+    {
+        "title": "Job losses increase as recession fears mount",
+        "sentiment": "Negative",
+        "label": 0.0
+    },
+    {
+        "title": "Markets remain flat as investors await Fed decision",
+        "sentiment": "Neutral",
+        "label": 1.0
+    }
+]
