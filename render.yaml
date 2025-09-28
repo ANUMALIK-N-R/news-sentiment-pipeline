@@ -1,21 +1,21 @@
 services:
-  # Zookeeper: A private service for Kafka to use
-  - type: pserv
-    name: zookeeper
+  # Zookeeper
+  - name: zookeeper
+    runtime: docker
     dockerfilePath: ./Dockerfile.zookeeper
     envVars:
-      - key: ZOOKeeper_CLIENT_PORT
-        value: 2181
+      - key: ZOOKEEPER_CLIENT_PORT
+        value: "2181"
       - key: ZOOKEEPER_TICK_TIME
-        value: 2000
+        value: "2000"
 
-  # Kafka: A private service for messaging
-  - type: pserv
-    name: kafka
+  # Kafka
+  - name: kafka
+    runtime: docker
     dockerfilePath: ./Dockerfile.kafka
     envVars:
       - key: KAFKA_BROKER_ID
-        value: 1
+        value: "1"
       - key: KAFKA_ZOOKEEPER_CONNECT
         value: zookeeper:2181
       - key: KAFKA_LISTENERS
@@ -27,33 +27,30 @@ services:
       - key: KAFKA_INTER_BROKER_LISTENER_NAME
         value: PLAINTEXT_INTERNAL
       - key: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-        value: 1
+        value: "1"
 
-  # Producer: A background worker fetching news
-  - type: worker
-    name: producer
+  # Producer
+  - name: producer
+    runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: python news_producer.py
     envVars:
       - key: NEWSAPI_KEY
         fromSecret: news_api_key
       - key: KAFKA_URL
         value: kafka:9092
 
-  # Spark: A background worker for inference
-  - type: worker
-    name: spark
+  # Spark
+  - name: spark
+    runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: "spark-submit --master local[*] stream_infer.py"
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
 
-  # Dashboard: The public-facing web service
-  - type: web
-    name: dashboard
+  # Dashboard
+  - name: dashboard
+    runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: streamlit run dashboard.py --server.port=8080 --server.address=0.0.0.0
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
