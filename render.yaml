@@ -2,7 +2,7 @@ services:
   # Zookeeper: A private service for Kafka to use
   - type: pserv
     name: zookeeper
-    dockerfilePath: ./Dockerfile.zookeeper # CHANGED FROM image:
+    dockerfilePath: ./Dockerfile.zookeeper
     envVars:
       - key: ZOOKeeper_CLIENT_PORT
         value: 2181
@@ -12,7 +12,7 @@ services:
   # Kafka: A private service for messaging
   - type: pserv
     name: kafka
-    dockerfilePath: ./Dockerfile.kafka # CHANGED FROM image:
+    dockerfilePath: ./Dockerfile.kafka
     envVars:
       - key: KAFKA_BROKER_ID
         value: 1
@@ -36,25 +36,24 @@ services:
     startCommand: python news_producer.py
     envVars:
       - key: NEWSAPI_KEY
-        fromSecret: news_api_key # Pulls the secret value
+        fromSecret: news_api_key
       - key: KAFKA_URL
-        value: kafka:9092 # Connects to the Kafka service above
+        value: kafka:9092
 
   # Spark: A background worker for inference
   - type: worker
     name: spark
     dockerfilePath: ./Dockerfile
-    startCommand: spark-submit --master local[*] stream_infer.py
+    startCommand: "spark-submit --master local[*] stream_infer.py"
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
 
   # Dashboard: The public-facing web service
-    - type: web
+  - type: web
     name: dashboard
     dockerfilePath: ./Dockerfile
     startCommand: streamlit run dashboard.py --server.port=8080 --server.address=0.0.0.0
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
-
