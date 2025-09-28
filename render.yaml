@@ -1,5 +1,5 @@
 services:
-  # Zookeeper: Kafka dependency
+  # Zookeeper
   - type: worker
     name: zookeeper
     runtime: docker
@@ -10,7 +10,7 @@ services:
       - key: ZOOKEEPER_TICK_TIME
         value: "2000"
 
-  # Kafka: messaging service
+  # Kafka
   - type: worker
     name: kafka
     runtime: docker
@@ -31,34 +31,31 @@ services:
       - key: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
         value: "1"
 
-  # Producer: background worker fetching news
+  # Producer
   - type: worker
     name: producer
     runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: python news_producer.py
     envVars:
       - key: NEWSAPI_KEY
-        fromSecret: news_api_key
+        value: "<set-from-dashboard-secret>"   # Docker cannot use fromSecret here
       - key: KAFKA_URL
         value: kafka:9092
 
-  # Spark: background worker for inference
+  # Spark
   - type: worker
     name: spark
     runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: "spark-submit --master local[*] stream_infer.py"
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
 
-  # Dashboard: public-facing web service
+  # Dashboard
   - type: web
     name: dashboard
     runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: streamlit run dashboard.py --server.port=8080 --server.address=0.0.0.0
     envVars:
       - key: KAFKA_URL
         value: kafka:9092
