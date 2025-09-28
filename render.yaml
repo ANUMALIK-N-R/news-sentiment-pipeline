@@ -1,6 +1,6 @@
 services:
-  # Zookeeper: private Kafka dependency
-  - type: private_service
+  # Zookeeper: Kafka dependency
+  - type: worker
     name: zookeeper
     runtime: docker
     dockerfilePath: ./Dockerfile.zookeeper
@@ -10,8 +10,8 @@ services:
       - key: ZOOKEEPER_TICK_TIME
         value: "2000"
 
-  # Kafka: private messaging service
-  - type: private_service
+  # Kafka: messaging service
+  - type: worker
     name: kafka
     runtime: docker
     dockerfilePath: ./Dockerfile.kafka
